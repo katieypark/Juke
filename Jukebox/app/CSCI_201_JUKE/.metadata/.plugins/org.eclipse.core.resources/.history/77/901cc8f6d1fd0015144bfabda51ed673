@@ -1,0 +1,14 @@
+package client;
+
+public class RemoveSongCommand extends ServerCommand {
+
+	private static final long serialVersionUID = -3685517316164360105L;
+
+	public RemoveSongCommand(Song song) {
+		super(song);
+	}
+	
+	public void execute(Playlist playlist) {
+		playlist.deleteSong(song);
+	}
+}

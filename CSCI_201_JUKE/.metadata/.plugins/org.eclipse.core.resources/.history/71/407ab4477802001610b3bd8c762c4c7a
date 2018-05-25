@@ -1,0 +1,126 @@
+package host;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import client.Song;
+import server.Constants;
+
+public class HostServer extends Thread{
+	private UpdateThread updater;//TODO maybe this is unclean
+	private ServerSocket ss;
+	private int port;
+	private List<Song> availableSongs;
+	
+	
+	public HostServer(int port, UpdateThread updater, List<Song> availableSongs){
+		this.availableSongs = availableSongs;
+		this.updater = updater;
+		try {
+			readConfigurationFile();
+			ss = new ServerSocket(port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void stopHost(){
+		if(ss != null && !ss.isClosed()){
+			try {
+				ss.close();
+				ss = null;
+				updater.stopUpdating();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void run() {
+		try {
+			while (ss != null) {
+				System.out.println("waiting for connections...");
+				
+				Socket s = ss.accept();
+				
+				//create receiver thread with s and the update thread TODO
+				ReceiverThread receiver = new ReceiverThread(updater,s,availableSongs);
+				receiver.start();
+				
+			}
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		} finally {
+			try {
+				if (ss != null)
+					ss.close();
+			} catch (IOException ioe) {
+				System.out.println("ioe closing ss: " + ioe.getMessage());
+			}
+		}
+	}
+	
+	// parse configuration file
+		private void readConfigurationFile() {
+			FileReader fr = null;
+			BufferedReader br = null;
+			try {
+				fr = new FileReader(Constants.hostconfig);
+				br = new BufferedReader(fr);
+				String line = br.readLine();
+				while(line != null) {
+					line.trim(); //removes trailing and leading whitespace
+					if (line.startsWith("#")) {
+						// ignore the comment
+					}
+					else if (line.startsWith("port")) {
+						// receive port number
+						StringTokenizer st = new StringTokenizer(line, "|");
+						st.nextToken(); // description, "port"
+						port = Integer.parseInt(st.nextToken());
+
+					}
+					//else if (line.startsWith("ip")) {
+						/*
+						// receive ip address
+						StringTokenizer st = new StringTokenizer(line, "|");
+						st.nextToken(); // description, "ip"
+						IPAddress = st.nextToken();
+						*/
+					//}
+					else if (line.length() == 0) {
+						// ignore blank line
+					}
+					else {
+						System.out.println("Unrecognized line in configuration file: " + line);
+					}
+
+					line = br.readLine();
+				}
+			} catch (FileNotFoundException fnfe) {
+				System.out.println("FNFE while reading configuration file: " + fnfe.getMessage());
+			} catch (IOException ioe) {
+				System.out.println("IOE while reading configuration file: " + ioe.getMessage());
+			} finally {
+				try {
+					if (br != null) {
+						br.close();
+					}
+					if (fr != null) {
+						fr.close();
+					}
+				} catch (IOException ioe) {
+					System.out.println("IOE: " + ioe.getMessage());
+				}
+			}
+		}
+	
+}

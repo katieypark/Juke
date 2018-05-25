@@ -1,0 +1,21 @@
+package client;
+
+import java.io.Serializable;
+
+public class ImmediateCommand implements Serializable {
+
+	private static final long serialVersionUID = -6979378487623745493L;
+	
+	private String label;
+	
+	public ImmediateCommand(String label) {
+		this.label = label;
+	}
+	
+	// Get label
+	public String getLabel() {
+		return label;
+	}
+	
+
+}

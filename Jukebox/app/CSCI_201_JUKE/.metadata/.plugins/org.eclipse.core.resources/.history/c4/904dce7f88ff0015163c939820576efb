@@ -1,0 +1,17 @@
+package server;
+
+public class loginCommand extends ServerCommand {
+
+	private static final long serialVersionUID = 4898896471224568719L;
+
+	private String username;
+	private String password;
+	
+	public loginCommand()
+	
+	@Override
+	ServerReply execute(DatabaseConnector dc) {
+		
+	}
+	
+}

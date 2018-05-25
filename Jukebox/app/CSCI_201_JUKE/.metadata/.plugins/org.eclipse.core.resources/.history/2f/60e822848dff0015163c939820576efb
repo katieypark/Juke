@@ -1,0 +1,31 @@
+package serverCommands;
+
+import server.DatabaseConnector;
+
+public class addUserCommand extends ServerCommand {
+
+	private static final long serialVersionUID = 9158994297832369271L;
+
+	private String username;
+	private String email;
+	private String password;
+	
+	@Override
+	ServerReply execute(DatabaseConnector dc) {
+		boolean success = dc.createUser(username, email, password);		
+		return new ServerReply("Bool", success);
+	}
+	
+	public String getUsername(String username) {
+		return username;
+	}
+	
+	public String getEmail(String email) {
+		return email;
+	}
+	
+	public String getPassword(String password) {
+		return password;
+	}
+
+}

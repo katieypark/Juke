@@ -1,0 +1,33 @@
+CREATE DATABASE Juke;
+use Juke;
+
+CREATE TABLE User(
+	userID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(32) NOT NULL UNIQUE,
+    email VARCHAR(254) NOT NULL ,
+    passhash VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE Friend(
+	friendshipID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    followerID INT(11) NOT NULL,
+    followedID INT(11) NOT NULL,
+    FOREIGN KEY fk1(followerID) REFERENCES User(userID),
+    FOREIGN KEY fk2(followedID) REFERENCES User(userID)
+);
+
+CREATE TABLE Playlist(
+	playlistID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    userID INT(11) NOT NULL,
+    playlistname VARCHAR(254) NOT NULL,
+    FOREIGN KEY fk3(userID) REFERENCES User(userID)
+);
+
+CREATE TABLE PlaylistContent (
+	playlistSongID INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	playlistID INT(11) NOT NULL,
+	songIndex INT(11) NOT NULL,
+	songName VARCHAR(64) NOT NULL,
+	songArtist VARCHAR(64) NOT NULL,
+	FOREIGN KEY fk4(playlistID) REFERENCES Playlist(playlistID)
+);

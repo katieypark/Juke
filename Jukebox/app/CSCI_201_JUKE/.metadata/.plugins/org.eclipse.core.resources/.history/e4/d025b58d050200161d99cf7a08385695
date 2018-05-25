@@ -1,0 +1,23 @@
+package client;
+
+import hostCommands.ImmediateCommand;
+
+public class ClientRefreshThread extends Thread{
+
+	private CommandThread ct;
+	private final static int refreshRate = 500;
+	
+	public ClientRefreshThread(CommandThread ct){
+		this.ct = ct;
+	}
+	
+	public void run(){
+		try {
+			Thread.sleep(refreshRate);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ct.executeImmediate(new ImmediateCommand("RefreshPlaylist"));
+	}
+}

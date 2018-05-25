@@ -1,0 +1,30 @@
+package server;
+
+public class addUserCommand extends ServerCommand {
+
+	private static final long serialVersionUID = 9158994297832369271L;
+
+	private String username;
+	private String email;
+	private String password;
+	
+	@Override
+	void execute(DatabaseConnector dc) {
+		dc.createUser(username, email, password);
+		
+		// Create directory for user
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+}

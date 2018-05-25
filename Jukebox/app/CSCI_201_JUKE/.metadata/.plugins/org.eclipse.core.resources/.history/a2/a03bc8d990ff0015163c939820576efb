@@ -1,0 +1,134 @@
+package server;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+public class Server extends Thread {
+
+	private ServerSocket ss;
+	private Vector<ServerThread> serverThreads;
+	private static int port;
+	
+	
+	// Create fileSystem for user
+		// Create playlist file for new playlist
+		// Delete playlist file
+		// read playlist files
+	
+	
+	public Server(int Port) {
+		try {
+			readConfigurationFile();
+			serverThreads = new Vector<ServerThread>();
+			ss = new ServerSocket(Port);
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		} 
+	}
+	
+	@Override
+	public void run() {
+		try {
+			while (true) {
+				// TEST
+				System.out.println("waiting for connections...");
+				Socket s = ss.accept();
+				// TEST
+				System.out.println("connection from " + s.getInetAddress());
+				ServerThread st = new ServerThread(s, this);
+				serverThreads.add(st);
+			}
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		} finally {
+			try {
+				if (ss != null)
+					ss.close();
+			} catch (IOException ioe) {
+				System.out.println("ioe closing ss: " + ioe.getMessage());
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		new Server(port);
+	}
+	
+	// If we want to shutdown the server
+	@SuppressWarnings("deprecation")
+	public void shutDownServer() {
+		try {
+			ss.close();
+			stop();
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		}
+	}
+	
+	// If we want to remove serverThread
+	public void removeServerThread(ServerThread st) {
+		serverThreads.remove(st);
+	}
+	
+	// parse configuration file
+	private void readConfigurationFile() {
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(Constants.config);
+			br = new BufferedReader(fr);
+			String line = br.readLine();
+			while(line != null) {
+				line.trim(); //removes trailing and leading whitespace
+				if (line.startsWith("#")) {
+					// ignore the comment
+				}
+				else if (line.startsWith("port")) {
+					// receive port number
+					StringTokenizer st = new StringTokenizer(line, "|");
+					st.nextToken(); // description, "port"
+					port = Integer.parseInt(st.nextToken());
+
+				}
+				//else if (line.startsWith("ip")) {
+					/*
+					// receive ip address
+					StringTokenizer st = new StringTokenizer(line, "|");
+					st.nextToken(); // description, "ip"
+					IPAddress = st.nextToken();
+					*/
+				//}
+				else if (line.length() == 0) {
+					// ignore blank line
+				}
+				else {
+					System.out.println("Unrecognized line in configuration file: " + line);
+				}
+
+				line = br.readLine();
+			}
+		} catch (FileNotFoundException fnfe) {
+			System.out.println("FNFE while reading configuration file: " + fnfe.getMessage());
+		} catch (IOException ioe) {
+			System.out.println("IOE while reading configuration file: " + ioe.getMessage());
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+				if (fr != null) {
+					fr.close();
+				}
+			} catch (IOException ioe) {
+				System.out.println("IOE: " + ioe.getMessage());
+			}
+		}
+	}
+	
+}

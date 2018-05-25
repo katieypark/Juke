@@ -1,0 +1,13 @@
+package client;
+
+import java.io.Serializable;
+
+abstract class ServerCommand implements Serializable {
+	
+	private PlaylistSong playlistsong;
+	
+	protected ServerCommand(PlaylistSong song) {
+		this.playlistsong = song;
+	}
+		
+}

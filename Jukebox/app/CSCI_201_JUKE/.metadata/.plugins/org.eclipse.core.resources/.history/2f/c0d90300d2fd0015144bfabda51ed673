@@ -1,0 +1,10 @@
+package client;
+
+public class UpvoteCommand extends ServerCommand {
+
+	public UpvoteCommand(Song song) {
+		super(song);
+	}
+	
+	
+}

@@ -1,0 +1,33 @@
+package host;
+
+import java.io.ObjectOutputStream;
+import java.util.Queue;
+import client.Playlist;
+import hostCommands.HostCommand;
+
+public class UpdateThread extends Thread {
+
+	private Queue<HostCommand> commands;
+	private Playlist playlist;
+	private boolean updating;
+	private ObjectOutputStream oos;
+	
+	
+	
+	
+	
+	
+}
+
+/*
+
+Queue<ServerCommand> commands;
+Playlist playlist;
+Bool updating;
+ObjectOutputStream oos;
+UpdateThread(Playlist);
+Void addCommand(ServerCommand);
+Bool isUpdating();
+Void run()
+
+*/

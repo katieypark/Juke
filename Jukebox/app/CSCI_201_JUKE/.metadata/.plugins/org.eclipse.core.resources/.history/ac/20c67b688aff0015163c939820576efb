@@ -1,0 +1,28 @@
+package server;
+
+public class getFollowingCommand extends ServerCommand {
+
+
+	private String username;
+	private String password;
+	
+	public loginCommand(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+	
+	@Override
+	ServerReply execute(DatabaseConnector dc) {
+		boolean success = dc.login(username, password);
+		return new ServerReply("Bool", success);
+	}
+	
+	String getUsername() {
+		return username;
+	}
+	
+	String getPassword() {
+		return password;
+	}
+	
+}

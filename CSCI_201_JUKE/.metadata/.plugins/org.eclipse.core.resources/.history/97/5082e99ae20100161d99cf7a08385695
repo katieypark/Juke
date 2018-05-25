@@ -1,0 +1,26 @@
+package client;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+public class ServerConnector {
+	
+	private Socket server;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
+	
+	public ServerConnector(String hostname, int port) {
+		server = new Socket(hostname, port);
+		oos = new ObjectOutputStream(server.getOutputStream());
+		ois = new ObjectInputStream(server.getInputStream());	 
+	}
+	
+	public boolean login(String username, String password) {
+		
+	}
+	
+	public boolean addHost
+	
+	
+}

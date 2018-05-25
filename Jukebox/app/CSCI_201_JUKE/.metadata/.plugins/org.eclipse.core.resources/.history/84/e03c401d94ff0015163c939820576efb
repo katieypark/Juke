@@ -1,0 +1,45 @@
+package host;
+
+import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import client.Playlist;
+import hostCommands.HostCommand;
+
+public class UpdateThread extends Thread {
+
+	private ConcurrentLinkedQueue<HostCommand> commands;
+	private Playlist playlist;
+	private boolean updating;
+	
+	public UpdateThread(Playlist playlist) {
+		this.playlist = playlist;
+		commands = new ConcurrentLinkedQueue<HostCommand>();
+		updating = false;
+	}
+	
+	// add a command to the Queue
+	public void addCommand(HostCommand command) {
+		commands.add(command);
+	}
+	
+	public Playlist getRefreshedPlaylist() {
+		return playlist;
+	}
+	
+}
+
+/*
+
+Queue<ServerCommand> commands;
+Playlist playlist;
+Bool updating;
+ObjectOutputStream oos;
+UpdateThread(Playlist);
+Void addCommand(ServerCommand);
+Bool isUpdating();
+Void run()
+
+*/

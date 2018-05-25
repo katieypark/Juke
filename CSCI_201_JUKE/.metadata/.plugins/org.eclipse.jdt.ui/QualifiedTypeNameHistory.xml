@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.mysql.jdbc.Connection"/>
+<fullyQualifiedTypeName name="java.sql.SQLException"/>
+<fullyQualifiedTypeName name="com.mysql.jdbc.PreparedStatement"/>
+<fullyQualifiedTypeName name="com.mysql.jdbc.ResultSet"/>
+<fullyQualifiedTypeName name="java.sql.DriverManager"/>
+<fullyQualifiedTypeName name="java.security.MessageDigest"/>
+<fullyQualifiedTypeName name="java.security.NoSuchAlgorithmException"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.Queue"/>
+<fullyQualifiedTypeName name="serverCommands.removeHostCommand"/>
+<fullyQualifiedTypeName name="serverCommands.addHostCommand"/>
+<fullyQualifiedTypeName name="java.io.ObjectOutputStream"/>
+<fullyQualifiedTypeName name="java.io.ObjectInputStream"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="serverCommands.loginCommand"/>
+<fullyQualifiedTypeName name="serverCommands.removePlaylistCommand"/>
+<fullyQualifiedTypeName name="serverCommands.createPlaylistCommand"/>
+<fullyQualifiedTypeName name="serverCommands.copyPlaylistCommand"/>
+<fullyQualifiedTypeName name="server.Host"/>
+<fullyQualifiedTypeName name="serverCommands.connectCommand"/>
+<fullyQualifiedTypeName name="host.UpdateThread"/>
+<fullyQualifiedTypeName name="host.HostServer"/>
+<fullyQualifiedTypeName name="hostCommands.AddSongCommand"/>
+<fullyQualifiedTypeName name="hostCommands.HostCommand"/>
+<fullyQualifiedTypeName name="hostCommands.DownvoteCommand"/>
+<fullyQualifiedTypeName name="hostCommands.ImmediateCommand"/>
+<fullyQualifiedTypeName name="serverCommands.ServerReply"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="client.Song"/>
+<fullyQualifiedTypeName name="serverCommands.addUserCommand"/>
+<fullyQualifiedTypeName name="java.io.Serializable"/>
+</qualifiedTypeNameHistroy>

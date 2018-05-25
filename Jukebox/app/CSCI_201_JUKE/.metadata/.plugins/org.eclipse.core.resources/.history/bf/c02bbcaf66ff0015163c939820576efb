@@ -1,0 +1,64 @@
+package server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Vector;
+
+public class Server extends Thread {
+
+	private ServerSocket ss;
+	private Vector<ServerThread> serverThreads;
+	
+	public Server(int Port) {
+		try {
+			serverThreads = new Vector<ServerThread>();
+			ss = new ServerSocket(Port);
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		} 
+	}
+	
+	@Override
+	public void run() {
+		try {
+			while (true) {
+				// TEST
+				System.out.println("waiting for connections...");
+				Socket s = ss.accept();
+				// TEST
+				System.out.println("connection from " + s.getInetAddress());
+				ServerThread st = new ServerThread(s, this);
+				serverThreads.add(st);
+			}
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		} finally {
+			try {
+				if (ss != null)
+					ss.close();
+			} catch (IOException ioe) {
+				System.out.println("ioe closing ss: " + ioe.getMessage());
+			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+	
+	// If we want to shutdown the server
+	@SuppressWarnings("deprecation")
+	public void shutDownServer() {
+		try {
+			ss.close();
+			stop();
+		} catch (IOException ioe) {
+			System.out.println("ioe: " + ioe.getMessage());
+		}
+	}
+	
+	public void removeServerThread(ServerThread st) {
+		serverThreads.remove(st);
+	}
+}

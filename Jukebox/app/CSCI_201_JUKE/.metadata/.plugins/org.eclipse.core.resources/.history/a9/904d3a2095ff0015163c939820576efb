@@ -1,0 +1,31 @@
+package hostCommands;
+
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import client.Playlist;
+import client.Song;
+
+abstract public class HostCommand implements Serializable {
+	
+	private static final long serialVersionUID = 3870097124606937491L;
+	
+	protected Song song;
+	protected ObjectOutputStream oos;
+	
+	protected HostCommand(Song song) {
+		this.song = song;
+		this.oos = null;
+	}
+		
+	abstract void execute(Playlist playlist);
+	
+	public void setObjectOutputStream(ObjectOutputStream oos) {
+		this.oos = oos;
+	}
+	
+	public ObjectOutputStream getObjectOutputStream() {
+		return oos;
+	}
+	
+}

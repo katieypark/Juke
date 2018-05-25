@@ -1,0 +1,12 @@
+package serverCommands;
+
+import java.io.Serializable;
+import server.DatabaseConnector;
+
+public abstract class ServerCommand implements Serializable {
+
+	private static final long serialVersionUID = 8252737106450144374L;
+	
+	public abstract ServerReply execute(DatabaseConnector dc);
+
+}

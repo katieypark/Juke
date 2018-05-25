@@ -1,0 +1,16 @@
+package client;
+
+public class AddSongCommand extends ServerCommand {
+	
+	private static final long serialVersionUID = 4436729219409091532L;
+
+	public AddSongCommand(Song song) {
+		super(song);
+	}
+	
+	// adds song to playlist, otherwise upvotes song in playlist
+	public void execute(Playlist playlist) {
+		playlist.addSong(song);
+	}
+
+}

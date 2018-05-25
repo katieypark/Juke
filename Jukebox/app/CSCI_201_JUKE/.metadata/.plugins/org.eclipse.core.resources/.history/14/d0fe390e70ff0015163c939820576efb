@@ -1,0 +1,16 @@
+package server;
+
+public class addUserCommand extends ServerCommand {
+
+	private static final long serialVersionUID = 9158994297832369271L;
+
+	private String username;
+	private String email;
+	private String password;
+	
+	@Override
+	void execute(DatabaseConnector dc) {
+		// TODO Auto-generated method stub
+	}
+
+}

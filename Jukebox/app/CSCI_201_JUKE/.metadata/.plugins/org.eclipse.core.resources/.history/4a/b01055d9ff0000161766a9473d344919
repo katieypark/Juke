@@ -1,0 +1,17 @@
+package client;
+
+public class ClientRefreshThread extends Thread {
+	
+	ClientRefreshThread() {
+		
+	}
+	
+	public void run() {
+		while (true) {
+			synchronized (this) {
+				addCommand(new RefreshPlaylistCommand());
+				this.sleep();
+			}
+		}
+	}
+}

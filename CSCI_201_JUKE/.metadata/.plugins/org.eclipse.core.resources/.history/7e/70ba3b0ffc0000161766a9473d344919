@@ -1,0 +1,18 @@
+package client;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Queue;
+
+import serverCommands.ServerCommand;
+
+public class CommandThread {
+	
+	Queue<ServerCommand> commands;
+	ObjectInputStream ois;
+	ObjectOutputStream oos;
+	
+	
+	
+	
+}

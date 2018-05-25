@@ -1,0 +1,17 @@
+package client;
+
+import java.io.Serializable;
+
+abstract class ServerCommand implements Serializable {
+	
+	private static final long serialVersionUID = 3870097124606937491L;
+	
+	private Song song;
+	
+	protected ServerCommand(Song song) {
+		this.song = song;
+	}
+		
+	abstract void execute(Playlist playlist);
+	
+}

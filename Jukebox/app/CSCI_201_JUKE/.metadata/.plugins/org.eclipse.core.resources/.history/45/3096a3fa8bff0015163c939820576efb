@@ -1,0 +1,17 @@
+package client;
+
+public class UpvoteCommand extends HostCommand {
+
+	private static final long serialVersionUID = -1256454814346385895L;
+
+	public UpvoteCommand(Song song) {
+		super(song);
+	}
+
+	// upvotes a song in the playlist
+	@Override
+	public void execute(Playlist playlist) {
+		playlist.upvote(song);
+	}
+	
+}

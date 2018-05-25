@@ -1,0 +1,42 @@
+package client;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import server.DatabaseConnector;
+import serverCommands.ServerCommand;
+
+public class CommandThread extends Thread {
+	
+	private ConcurrentLinkedQueue<ServerCommand> commands;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
+	private DatabaseConnector dc;
+	
+	CommandThread(DatabaseConnector databaseconnector) {
+		this.dc = databaseconnector;
+	}
+	
+	synchronized public void addCommand(ServerCommand command) {
+		commands.add(command);
+	}
+	
+	public boolean executeCommand() {
+		return false;
+	}
+	
+	public void run() {
+		while (true) {
+			synchronized (this) {
+				ServerCommand current = commands.poll();
+				boolean success = current.execute(dc);
+				oos = current.getObjectOutputStream();
+				if (oos != null) {
+					
+				}
+			}
+		}
+	}
+}

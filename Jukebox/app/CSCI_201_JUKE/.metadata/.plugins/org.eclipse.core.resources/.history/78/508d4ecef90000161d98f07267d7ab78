@@ -1,0 +1,9 @@
+package client;
+
+import serverCommands.ServerCommand;
+
+public class CommandThread {
+	
+	Queue<ServerCommand> commands;
+	
+}

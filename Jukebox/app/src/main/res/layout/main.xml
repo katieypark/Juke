@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:choiceMode = "multipleChoice"
+    android:background="@drawable/backgrounds"
+    android:listSelector = "#8E8E90">
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+
+    </ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/submitButton"
+        android:background="#ff0066"
+        android:layout_gravity="center_horizontal"
+        android:width="300dp"
+        android:textColor="#ffffff" />
+
+
+</LinearLayout>

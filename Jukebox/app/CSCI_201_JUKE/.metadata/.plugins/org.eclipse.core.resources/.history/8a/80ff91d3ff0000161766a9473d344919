@@ -1,0 +1,13 @@
+package serverCommands;
+
+import server.DatabaseConnector;
+
+public class refreshPlaylistCommand extends ServerCommand {
+
+	@Override
+	ServerReply execute(DatabaseConnector dc) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,200 @@
+package client;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
+
+import host.HostServer;
+import host.UpdateThread;
+import hostCommands.AddSongCommand;
+import hostCommands.DownvoteCommand;
+import hostCommands.ImmediateCommand;
+import hostCommands.RemoveSongCommand;
+import hostCommands.UpvoteCommand;
+import server.Host;
+import serverCommands.ServerReply;
+
+public class Client {
+	
+	private String username;
+	private ServerConnector sc;
+	// Client (connect to Playlist)
+	private CommandThread commandThread;
+	// Host (own Playlist)
+	private boolean isHost;
+	private HostServer hs;
+	private Playlist playlist;
+	
+	// If guest, pass null
+	public Client(ServerConnector sc, String username){
+		this.sc = sc;
+		this.username = username;
+	}
+	
+	// TODO
+	// Get Available Songs
+	// Refresh Playlist
+	
+	public List<Song> getAvailableSongs() {
+		if (commandThread == null)
+			return null;
+		
+		
+	}
+	
+	public Playlist refreshPlaylist() {
+		if (commandThread == null)
+			return null;
+		ServerReply sr = commandThread.executeImmediate(new ImmediateCommand("RefreshPlaylist"));
+		if (sr.getLabel().equals("RefreshPlaylist"))
+			return (Playlist) sr.getData();
+		else
+			return null;
+	}
+	
+	public boolean upvoteSong(Song song) {
+		if (commandThread == null) 
+			return false;
+		commandThread.addCommand(new UpvoteCommand(song));
+		return true;
+	}
+	
+	public boolean downvoteSong(Song song) {
+		if (commandThread == null) 
+			return false;
+		commandThread.addCommand(new DownvoteCommand(song));
+		return true;
+	}
+	
+	public boolean removeSong(Song song) {
+		if (commandThread == null) 
+			return false;
+		commandThread.addCommand(new RemoveSongCommand(song));
+		return true;
+	}
+	
+	public boolean addSong(Song song) {
+		if (commandThread == null)
+			return false;
+		commandThread.addCommand(new AddSongCommand(song));
+		return true;
+	}
+	
+	public boolean joinPlaylist(String username){
+		if (isHost) // if already owns playlist
+			return false;
+		// Get the host from the server if you can
+		Host h = sc.connect(username);
+		if(h == null) // return false if can't join
+			return false; 
+		
+		try {
+			//connect to host
+			Socket s = new Socket(h.getHostname(),h.getPort());
+			//command thread
+			commandThread = new CommandThread(s, h.getHostname(), h.getPort());
+			commandThread.start();
+			// TODO
+			// Client Refresh Thread????
+		} catch (UnknownHostException e) {
+			return false;
+		} catch (IOException ioe) {
+			return false;
+		}
+		return true;
+	}
+	
+	
+	// Exits user from a playlist that current client is subscribed to
+	public boolean exitPlaylist(){
+		if (commandThread != null) {
+			commandThread.exitPlaylist();
+			commandThread = null;
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	// If a host, stops your playlist
+	public boolean stopPlaylist(){
+		if (isHost == false) // if not a host
+			return false;
+		else {
+			isHost = false;
+			if(!exitPlaylist())
+				return false;
+			hs.stopHost();
+			if(!sc.removeHost(this.username))
+				return false;	
+		}
+		return true;
+	}
+	
+	// Become a host!!
+	boolean startPlaylist(String hostname, int port, List<Song> availableSongs){
+		if (username == null || isHost == true) // if guest user
+			return false;
+		isHost = true;
+		playlist = new Playlist();
+		UpdateThread ut = new UpdateThread(playlist);
+		hs = new HostServer(port, ut, availableSongs);
+		hs.start();
+		if (!sc.addHost(this.username, hostname, port))
+			return false;
+		
+		try {
+			//connect to host (ourselves)
+			Socket s = new Socket(hostname, port);
+			//command thread
+			commandThread = new CommandThread(s, hostname, port);
+			commandThread.start();
+			// TODO
+			// Client Refresh Thread????
+		} catch (UnknownHostException e) {
+			return false;
+		} catch (IOException ioe) {
+			return false;
+		}
+		return true;
+	}
+	
+	// TODO
+	// Figure out how to pass around the playlist object
+	// Return a copy
+	List<Song> getPlaylist(String playlistname, String username){
+		return sc.getPlaylist(username, playlistname);
+	}
+	
+	List<String> getPlaylists(String username){
+		return sc.getPlaylists(username);
+	}
+	
+	boolean removePlaylist(String playlistname){
+		return sc.removePlaylist(this.username, playlistname);
+	}
+	
+	boolean followUser(String toFollowUsername){
+		return sc.followUser(this.username, toFollowUsername);
+	}
+	
+	List<String> getFollowing(){
+		return sc.getFollowing(this.username);
+	}
+	
+	boolean createPlaylist(String playlistname, Playlist p){
+		return sc.createPlaylist(this.username, playlistname, p);
+	}
+	
+	boolean copyPlaylist(String selectedUsername, String playlistname){
+		return sc.copyPlaylist(this.username, selectedUsername, playlistname);
+	}
+	public boolean isHost(){
+		return isHost;
+	}
+	public String getUsername(){
+		return username;
+	}
+	
+}

@@ -1,0 +1,119 @@
+package client;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
+
+import server.Host;
+
+public class Client {
+	
+	//TODO
+	private CommandThread commandThread;
+	private ServerConnector sc;
+	//TODO some connection to the device, an Activity 
+	private String username;
+	private String hostname;
+	private int portHost;
+	private boolean isHost;
+	
+	// Add DEVICE into constructor
+	public Client(ServerConnector sc, String username){
+		this.sc = sc;
+		this.username = username;
+	}
+	
+	//immediately gets all the available songs from the host
+	//creates client threads
+	//create socket
+	//start command thread
+	//start refresh thread
+	boolean joinPlaylist(String username){
+		
+		//TODO Get the host from the server if you can
+		Host h = sc.connect(username);
+		if(h == null) return false; //return false if cant join
+		
+		//set the hostname and porthost
+		isHost = false;
+		try {
+			//connect to host
+			Socket s = new Socket(h.getHostname(),h.getPort());
+			
+			//create the client threads
+			//command thread
+			CommandThread ct = new CommandThread(s, hostname, portHost);
+			ct.start();
+			//create clientRefreshThread. It currently is kinda useless
+			ClientRefreshThread clientRefreshThread = new ClientRefreshThread(ct);
+			clientRefreshThread.start();
+			
+		} catch (UnknownHostException e) {
+			//TODO
+			return false;
+		} catch (IOException e) {
+			//TODO
+			return false;
+		}
+		
+		//TODO
+		return false;
+	}
+	
+	boolean stopPlaylist(){
+		//TODO
+		return false;
+	}
+	
+	boolean startPlaylist(){
+		//TODO
+		return false;
+	}
+	
+	List<Song> getPlaylist(String playlistname, String username){
+		return sc.getPlaylist(username, playlistname);
+	}
+	
+	List<String> getPlaylists(String username){
+		//TODO
+	}
+	
+	boolean removePlaylist(String playlistname){
+		//TODO
+	}
+	
+	boolean followUser(String username){
+		//TODO
+	}
+	
+	List<String> getFollowing(){
+		//TODO
+	}
+	
+	boolean createPlaylist(String playistname, Playlist p){
+		//TODO
+	}
+	
+	boolean copyPlaylist(String username, String playlistname){
+		//TODO
+	}
+	
+
+	public int getPort(){
+		return portHost;
+	}
+	public boolean isHost(){
+		return isHost;
+	}
+	public String getUsername(){
+		return username;
+	}
+	public String getHostname(){
+		return hostname;
+	}
+	public CommandThread getCommandThread(){
+		return commandThread;
+	}
+
+}

@@ -1,0 +1,26 @@
+package serverCommands;
+
+import server.DatabaseConnector;
+
+public class RefreshPlaylistCommand extends ServerCommand {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4259563252280404163L;
+	
+	private String username;
+	private String playlistname;
+	
+	public RefreshPlaylistCommand() {
+		
+	}
+
+	@Override
+	public
+	ServerReply execute(DatabaseConnector dc) {
+		boolean success = dc.refreshPlaylist(playlistname, username);
+		return new ServerReply("Bool", success);
+	}
+
+}

@@ -1,0 +1,146 @@
+package client;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.List;
+
+import host.HostServer;
+import host.UpdateThread;
+import server.Host;
+
+public class Client {
+	
+	private String username;
+	private ServerConnector sc;
+	// Client (connect to Playlist)
+	private CommandThread commandThread;
+	// Host (own Playlist)
+	private boolean isHost;
+	
+	//TODO some connection to the device, an Activity 
+
+	
+	// Add DEVICE into constructor
+	public Client(ServerConnector sc, String username){
+		this.sc = sc;
+		this.username = username;
+	}
+	
+	//immediately gets all the available songs from the host
+	//creates client threads
+	//create socket
+	//start command thread
+	//start refresh thread
+	boolean joinPlaylist(String username){
+		
+		//TODO Get the host from the server if you can
+		Host h = sc.connect(username);
+		if(h == null) return false; //return false if cant join
+		
+		//set the hostname and porthost
+		isHost = false;
+		try {
+			//connect to host
+			Socket s = new Socket(h.getHostname(),h.getPort());
+			
+			//create the client threads
+			//command thread
+			commandThread = new CommandThread(s, h.getHostname(), h.getPort());
+			commandThread.start();
+			// TODO
+			// Client Refresh Thread????
+			
+		} catch (UnknownHostException e) {
+			//TODO
+			return false;
+		} catch (IOException e) {
+			//TODO
+			return false;
+		}
+		
+		//TODO
+		return false;
+	}
+	
+	
+	// Exits user from a playlist that current client is subscribed to
+	public boolean exitPlaylist(){
+		if (commandThread != null) {
+			commandThread.exitPlaylist();
+			commandThread = null;
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public boolean stopPlaylist(){
+		if (isHost == false) 
+			return false;
+		else 
+			return false;
+	}
+	
+	boolean startPlaylist(){
+		if (username == null) // if guest user
+			return false;
+		isHost = true;
+		Playlist playlist = new Playlist();
+		UpdateThread ut = new UpdateThread(playlist);
+		HostServer hs = new HostServer(port, ut);
+		hs.start();
+		
+		
+		new HostServer();
+		
+		return false;
+	}
+	
+	List<Song> getPlaylist(String playlistname, String username){
+		return sc.getPlaylist(username, playlistname);
+	}
+	
+	List<String> getPlaylists(String username){
+		return sc.getPlaylists(username);
+	}
+	
+	boolean removePlaylist(String playlistname){
+		return sc.removePlaylist(this.username, playlistname);
+	}
+	
+	boolean followUser(String toFollowUsername){
+		return sc.followUser(this.username, toFollowUsername);
+	}
+	
+	List<String> getFollowing(){
+		return sc.getFollowing(this.username);
+	}
+	
+	boolean createPlaylist(String playlistname, Playlist p){
+		return sc.createPlaylist(this.username, playlistname, p);
+	}
+	
+	boolean copyPlaylist(String selectedUsername, String playlistname){
+		return sc.copyPlaylist(this.username, selectedUsername, playlistname);
+	}
+
+	public int getPort(){
+		return portHost;
+	}
+	public boolean isHost(){
+		return isHost;
+	}
+	public String getUsername(){
+		return username;
+	}
+	public String getHostname(){
+		return hostname;
+	}
+	
+	/*
+	public CommandThread getCommandThread(){
+		return commandThread;
+	}
+	*/
+}

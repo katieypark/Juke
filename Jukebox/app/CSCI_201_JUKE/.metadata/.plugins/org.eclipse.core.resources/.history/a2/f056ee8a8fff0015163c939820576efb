@@ -1,0 +1,23 @@
+package serverCommands;
+
+import server.DatabaseConnector;
+
+public class userExistsCommand extends ServerCommand {
+	
+	private String username;
+	
+	public userExistsCommand(String username, String playlistname) {
+		this.username = username;
+	}
+	
+	@Override
+	public ServerReply execute(DatabaseConnector dc) {
+		boolean success = dc.userExists(username); 
+		return new ServerReply("Bool", success);
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+}

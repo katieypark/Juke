@@ -1,0 +1,40 @@
+package host;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import client.Playlist;
+import hostCommands.HostCommand;
+
+public class UpdateThread extends Thread {
+
+	private ConcurrentLinkedQueue<HostCommand> commands;
+	private Playlist playlist;
+	
+	public UpdateThread(Playlist playlist) {
+		this.playlist = playlist;
+		commands = new ConcurrentLinkedQueue<HostCommand>();
+	}
+	
+	// add a command to the Queue
+	synchronized public void addCommand(HostCommand command) {
+		commands.add(command);
+	}
+	
+	public void run() {
+		while (true) {
+			synchronized(this) {
+				if (commands.size() != 0) {
+					
+				
+					// sort Playlist
+					playlist.sortToPlay();
+				}
+			}
+		}
+	}
+	
+	public Playlist getRefreshedPlaylist() {
+		return playlist;
+	}
+	
+}

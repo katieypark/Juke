@@ -1,0 +1,29 @@
+package serverCommands;
+
+import server.DatabaseConnector;
+
+public class removeHostCommand extends ServerCommand {
+
+	private String username;
+	private String password;
+	
+	public loginCommand(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+	
+	@Override
+	public ServerReply execute(DatabaseConnector dc) {
+		boolean success = dc.login(username, password);
+		return new ServerReply("Bool", success);
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+}

@@ -1,0 +1,65 @@
+package client;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import server.DatabaseConnector;
+import serverCommands.ServerCommand;
+import serverCommands.ServerReply;
+
+public class CommandThread extends Thread {
+	
+	private ConcurrentLinkedQueue<ServerCommand> commands;
+	ObjectInputStream ois;
+	ObjectOutputStream oos;
+	private DatabaseConnector dc;
+	ServerCommand current;
+	
+	CommandThread(DatabaseConnector databaseconnector) {
+		this.dc = databaseconnector;
+		current = commands.poll();
+	}
+	
+	synchronized public void addCommand(ServerCommand command) {
+		commands.add(command);
+	}
+	
+	public boolean executeCommand() {
+		ServerReply success = current.execute(dc);
+		if ((boolean)success.getData() == true) {
+			oos.writeObject(current);
+			return true;
+		}
+		return false;
+	}
+	
+	public void run() {
+		while (true) {
+			synchronized (this) {
+				try {
+					boolean success = false;
+					Object o = ois.readObject();
+					//for refreshing the playlist; immediate command
+//					if (o instanceof RefreshPlaylistCommand) {
+//						
+//					}
+					if (o instanceof ServerReply) {
+						success = executeCommand();
+					}
+					if (success) {
+						current = commands.poll();
+					}
+					else {
+						continue;
+					}
+				} catch (ClassNotFoundException | IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+package client;
+
+public class RemoveSongCommand extends ServerCommand {
+
+	public RemoveSongCommand(Song song) {
+		super(song);
+	}
+	
+	public void execute(Playlist playlist) {
+		playlist.deleteSong(song);
+	}
+}

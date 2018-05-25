@@ -1,0 +1,5 @@
+package serverCommands;
+
+public class removeHostCommand {
+
+}
